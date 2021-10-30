@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerIdleState : GroundedState
 {
-    public PlayerIdleState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerIdleState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
@@ -20,9 +20,9 @@ public class PlayerIdleState : GroundedState
         if (Mathf.Abs(input.x) > 0.1f)
         {
             if (isPushing == false)
-                playerStateMachine.ChangeState(player.MoveState);
+                stateMachine.ChangeState(player.MoveState);
             else
-                playerStateMachine.ChangeState(player.PushState);
+                stateMachine.ChangeState(player.PushState);
         }
     }
 }

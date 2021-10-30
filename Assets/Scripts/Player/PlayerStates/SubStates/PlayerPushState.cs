@@ -1,14 +1,22 @@
 using UnityEngine;
+
 public class PlayerPushState : GroundedState
 {
 
-    public PlayerPushState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerPushState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
 
     public override void Enter()
     {
         base.Enter();
+        EventBroker.CallOnPushing();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        EventBroker.CallOnStopPushing();
     }
 
     public override void LogicUpdate()
@@ -17,7 +25,7 @@ public class PlayerPushState : GroundedState
 
         if (isPushing == false || Mathf.Abs(input.x) <= 0.01f)
         {
-            playerStateMachine.ChangeState(player.IdleState);
+            stateMachine.ChangeState(player.IdleState);
         }
     }
 

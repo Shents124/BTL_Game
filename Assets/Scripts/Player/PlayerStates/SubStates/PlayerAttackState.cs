@@ -4,7 +4,7 @@ public class PlayerAttackState : PlayerAbilityState
     private Vector2 input;
     private bool isGround;
 
-    public PlayerAttackState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerAttackState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
@@ -24,11 +24,16 @@ public class PlayerAttackState : PlayerAbilityState
         if (isAnimationFinished)
         {
             if (input.x != 0)
-                playerStateMachine.ChangeState(player.MoveState);
+                stateMachine.ChangeState(player.MoveState);
             else if (input.x == 0)
-                playerStateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.IdleState);
             else if (isGround == false)
-                playerStateMachine.ChangeState(player.AirState);
+                stateMachine.ChangeState(player.AirState);
         }
+    }
+
+    public override void AnimationTrigger()
+    {    
+        player.PlayerCombat.DoingDamage();
     }
 }

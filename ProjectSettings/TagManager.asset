@@ -15,10 +15,10 @@ TagManager:
   - Ground
   - Push
   - Buttom
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Enemy
+  - CameraBound
+  - Bomb
   - 
   - 
   - 
@@ -47,4 +47,10 @@ TagManager:
     locked: 0
   - name: Ground
     uniqueID: 2744913019
+    locked: 0
+  - name: Enemy
+    uniqueID: 1025030729
+    locked: 0
+  - name: Player
+    uniqueID: 1850567151
     locked: 0

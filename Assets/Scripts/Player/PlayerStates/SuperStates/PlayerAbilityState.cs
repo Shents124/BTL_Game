@@ -5,7 +5,7 @@ public class PlayerAbilityState : PlayerState
 
     private bool isGrounded;
 
-    public PlayerAbilityState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerAbilityState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
@@ -35,9 +35,9 @@ public class PlayerAbilityState : PlayerState
         if (isAbilityDone)
         {
             if (isGrounded && player.CurrentVelocity.y < 0.01f)
-                playerStateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.IdleState);
             else
-                playerStateMachine.ChangeState(player.AirState);
+                stateMachine.ChangeState(player.AirState);
         }
     }
 

@@ -5,7 +5,7 @@ public class PlayerAirState : PlayerState
     private const string YVelocity = "yVelocity";
     private bool isGround;
     private Vector2 input;
-    public PlayerAirState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerAirState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
@@ -16,16 +16,6 @@ public class PlayerAirState : PlayerState
         isGround = player.CheckIfGround();
     }
 
-    public override void Enter()
-    {
-        base.Enter();
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
     public override void LogicUpdate()
     {
         base.LogicUpdate();
@@ -34,16 +24,16 @@ public class PlayerAirState : PlayerState
 
         if (isGround && player.CurrentVelocity.y < 0.01f)
         {
-            playerStateMachine.ChangeState(player.LandState);
+            stateMachine.ChangeState(player.LandState);
         }
         else if (player.InputHandle.IsJumping() && player.JumpState.CanJump())
         {
-            playerStateMachine.ChangeState(player.JumpState);
+            stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();
         }
         else if (player.InputHandle.IsAttacking() && Mathf.Abs(input.x) <= 0.1f)
         {
-            playerStateMachine.ChangeState(player.AttackState);
+            stateMachine.ChangeState(player.AttackState);
             player.InputHandle.SetAttackInputToFalse();
         }
         else

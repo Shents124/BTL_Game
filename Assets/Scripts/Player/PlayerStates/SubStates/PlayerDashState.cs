@@ -3,19 +3,15 @@ using UnityEngine;
 public class PlayerDashState : PlayerState
 {
     private Vector2 lastAfterImagePos;
-    public PlayerDashState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerDashState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
-    }
-
-    public override void DoChecks()
-    {
-        base.DoChecks();
     }
 
     public override void Enter()
     {
         base.Enter();
+        player.InstantiateEffect(playerData.jumpEffect);
         player.SetGravity(0);
         PlaceAfterimage();
     }
@@ -23,7 +19,7 @@ public class PlayerDashState : PlayerState
     public override void Exit()
     {
         base.Exit();
-        player.SetGravity(5);
+        player.SetGravity(3);
     }
 
     public override void LogicUpdate()
@@ -34,9 +30,9 @@ public class PlayerDashState : PlayerState
         if (Time.time >= playerData.dashCoolDown + startTime)
         {
             if (player.CheckIfGround())
-                playerStateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.IdleState);
             else
-                playerStateMachine.ChangeState(player.AirState);          
+                stateMachine.ChangeState(player.AirState);          
         }
     }
 

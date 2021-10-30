@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using System;
 
 public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
@@ -13,6 +14,7 @@ public class UIVirtualJoystick : MonoBehaviour, IPointerDownHandler, IDragHandle
     [SerializeField] private float magnitudeMutiplier = 1f;
     [SerializeField] private bool invertXOutputValue;
     [SerializeField] private bool invertYOutputValue;
+
 
     [Header("Output")]
     public UnityEvent<Vector2> joystickOutputEvent;

@@ -1,18 +1,22 @@
-
 public class PlayerLandState : GroundedState
 {
-    public PlayerLandState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerLandState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
 
+    public override void Enter()
+    {
+        base.Enter();
+        player.InstantiateEffect(playerData.landEffect);
+    }
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
         if (input.x != 0)
-            playerStateMachine.ChangeState(player.MoveState);
+            stateMachine.ChangeState(player.MoveState);
         else if (isAnimationFinished)
-            playerStateMachine.ChangeState(player.IdleState);
+            stateMachine.ChangeState(player.IdleState);
     }
 }

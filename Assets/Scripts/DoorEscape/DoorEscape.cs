@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DoorEscape : MonoBehaviour
 {
@@ -6,7 +7,9 @@ public class DoorEscape : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<Player>().Escape();         
+            SceneManager.LoadScene("New Scene");  
+          // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIn);
         }
     }
+    
 }

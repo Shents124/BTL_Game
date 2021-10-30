@@ -1,58 +1,41 @@
-using UnityEngine;
 
-public class PlayerState
+public class PlayerState : State
 {
     protected Player player;
-    protected PlayerStateMachine playerStateMachine;
     protected PlayerData playerData;
-    protected bool isAnimationFinished;
-    protected float startTime;
-
-    private string animBoolName;
 
     public PlayerState()
     {
 
     }
 
-    public PlayerState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName)
+    public PlayerState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(stateMachine, animBoolName)
     {
         this.player = player;
-        this.playerStateMachine = playerStateMachine;
         this.playerData = playerData;
-        this.animBoolName = animBoolName;
     }
 
-    public virtual void Enter()
+    public override void Enter()
     {
-        DoChecks();
-        startTime = Time.time;
+        base.Enter();
         player.Anim.SetBool(animBoolName, true);
-        isAnimationFinished = false;
     }
 
-    public virtual void Exit()
+    public override void Exit()
     {
         player.Anim.SetBool(animBoolName, false);
     }
 
-    public virtual void LogicUpdate()
+    public override void LogicUpdate()
     {
         if (player.InputHandle.IsDashing())
         {
-            playerStateMachine.ChangeState(player.DashState);
+            stateMachine.ChangeState(player.DashState);
             player.InputHandle.SetDashInputToFalse();
         }
+        else if(player.PlayerCombat.GetIsDamaged())
+        {
+            stateMachine.ChangeState(player.HitState);
+        }
     }
-
-    public virtual void PhysicsUpdate()
-    {
-        DoChecks();
-    }
-
-    public virtual void DoChecks() { }
-
-    public virtual void AnimationTrigger() { }
-
-    public virtual void AnimationFinishTrigger() { isAnimationFinished = true; }
 }

@@ -1,34 +1,30 @@
-using UnityEngine;
+
 public class PlayerJumpState : PlayerAbilityState
 {
-    private int amountOfJumpsLeft;
-    public PlayerJumpState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+
+    public PlayerJumpState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
-        amountOfJumpsLeft = playerData.amountOfJumps;
+       
     }
 
     public override void Enter()
     {
         base.Enter();
+        player.InstantiateEffect(playerData.jumpEffect);
         player.SetVelocityY(playerData.jumpVelocity);
-        isAbilityDone = true;
-        amountOfJumpsLeft--;
-    }
-
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+        DecreaseAmoutOfJumpLeft();
+        isAbilityDone = true;  
     }
 
     public bool CanJump()
     {
-        if (amountOfJumpsLeft > 0)
+        if (player.amountOfJumpsLeft > 0)
             return true;
 
         return false;
     }
 
-    public void ResetAmountOfJumpLeft() => amountOfJumpsLeft = playerData.amountOfJumps;
+    public void ResetAmountOfJumpLeft() => player.amountOfJumpsLeft = playerData.amountOfJumps;
 
-    public void DecreaseAmoutOfJumpLeft() => amountOfJumpsLeft--;
+    public void DecreaseAmoutOfJumpLeft() => player.amountOfJumpsLeft--;
 }
