@@ -8,20 +8,28 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
     private const string Death = "Death";
     #endregion
 
+    public float speed = 20f;
+    public float gravity = 9.81f;
+    public bool lowAngle = true;
+    public float shotDelay = 0.5f;
+
     [SerializeField] private EnemyData enemyData;
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private Transform throwPosition;
-    [SerializeField] private float t;
-    [SerializeField] private float launchForce;
-    [SerializeField] private float timeAttackDelay = 0.3f;
+
     private Vector2 direction;
     private AIDetector aIDetector;
     private Animator animator;
     private EnemyHealth enemyHealth;
     private float currentHealth;
-    private float startTimeAttack = 0f;
-    private bool isFacingRight;
 
+    private int facingDirection;
+
+    public GameObject target;
+
+    private bool canThrow = true;
+
+    private Vector2 throwDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -30,33 +38,35 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
         enemyHealth = GetComponent<EnemyHealth>();
         aIDetector = GetComponent<AIDetector>();
         currentHealth = enemyData.maxHealth;
-        isFacingRight = true;
+        facingDirection = 1;
         direction = Vector2.right;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //CalculateDirectionThrowBomb(t);
 
-        if (aIDetector.PlayerDetected && (Time.time - startTimeAttack) >= timeAttackDelay)
+        if (aIDetector.PlayerDetected)
         {
-            animator.SetTrigger(Attack);
-            startTimeAttack = Time.time;
+            target = aIDetector.Target;
+            direction = target.transform.position - transform.position;
+            throwDirection = CalculateDirection();
+
+            if (throwDirection != Vector2.zero && Vector2.Distance(target.transform.position, transform.position) > 3)
+            {
+                animator.SetTrigger(Attack);
+                //ThrowBomb();
+            }
         }
 
-        if(direction.x <= 0 && isFacingRight || direction.x >= 0 && isFacingRight == false)
+
+        if (direction.x <= 0 && facingDirection == 1 || direction.x >= 0 && facingDirection == -1)
             Flip();
-    }
-    private void FixedUpdate()
-    {
-        CalculateDirectionThrowBomb(Time.deltaTime);
     }
 
     public void TakeDame(int amountOfDame)
     {
-        currentHealth -= amountOfDame;
-        Debug.Log(currentHealth);
+        // currentHealth -= amountOfDame;
         if (currentHealth != 0)
             animator.SetTrigger(Hit);
 
@@ -68,21 +78,64 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
 
     }
 
-    private void ThrowBomb()
+    void ThrowBomb()
     {
-        GameObject bombObject = Instantiate(bombPrefab, throwPosition.position, Quaternion.identity);
-        bombObject.GetComponent<Rigidbody2D>().velocity = direction.normalized * launchForce * Time.deltaTime;
+        if (canThrow)
+        {
+            GameObject bomb = Instantiate(bombPrefab, throwPosition.transform.position, bombPrefab.transform.rotation);
+            bomb.GetComponent<Rigidbody2D>().velocity = throwDirection * speed;
+            Debug.Log(throwDirection);
+
+            canThrow = false;
+            Invoke("CanThrowAgain", shotDelay);
+        }
+
+    }
+    void CanThrowAgain() => canThrow = true;
+
+    float? CalculateAngle(bool low)
+    {
+        Vector2 targetDir = (Vector2)target.transform.position - (Vector2)throwPosition.transform.position;
+        float y = targetDir.y;
+        targetDir.y = 0f;
+        float x = targetDir.magnitude;
+
+        float sSqr = speed * speed;
+        float underTheSqrRoot = (sSqr * sSqr) - gravity * (gravity * x * x + 2 * y * sSqr);
+
+        if (underTheSqrRoot >= 0f)
+        {
+            float root = Mathf.Sqrt(underTheSqrRoot);
+            float highAngle = sSqr + root;
+            float lowAngle = sSqr - root;
+
+            if (low)
+                return (Mathf.Atan2(lowAngle, gravity * x) * Mathf.Rad2Deg);
+            else
+                return (Mathf.Atan2(highAngle, gravity * x) * Mathf.Rad2Deg);
+        }
+        else
+            return null;
     }
 
-    private void CalculateDirectionThrowBomb(float t)
+    Vector2 CalculateDirection()
     {
-        if (aIDetector.PlayerDetected)
-            direction = ((Vector2)aIDetector.Target.transform.position - 0.5f * Physics2D.gravity * t * t) / (launchForce * t);
+        float? angle = CalculateAngle(lowAngle);
+
+        Vector2 direction = Vector2.zero;
+        if (angle != null)
+        {
+            float y = Mathf.Tan((float)angle);
+            direction = new Vector2(1f, y);
+            return (direction * facingDirection).normalized;
+        }
+
+        return Vector2.zero;
     }
 
     private void Flip()
     {
-        isFacingRight = !isFacingRight;
+        facingDirection *= -1;
         Vector3 _scale = transform.localScale;
         _scale.x *= -1;
         transform.localScale = _scale;

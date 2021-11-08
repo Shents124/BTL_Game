@@ -6,7 +6,7 @@ public class PlayerIdleState : GroundedState
     {
 
     }
-    
+
     public override void Enter()
     {
         base.Enter();
@@ -23,6 +23,13 @@ public class PlayerIdleState : GroundedState
                 stateMachine.ChangeState(player.MoveState);
             else
                 stateMachine.ChangeState(player.PushState);
+        }
+
+        if (player.InputHandle.IsAttacking())
+        {
+            stateMachine.ChangeState(player.AttackState);
+            player.InputHandle.SetAttackInputToFalse();
+
         }
     }
 }

@@ -35,6 +35,12 @@ public class PlayerMoveState : GroundedState
         {
             stateMachine.ChangeState(player.PushState);
         }
+        else if (player.InputHandle.IsAttacking())
+        {
+            stateMachine.ChangeState(player.AttackState);
+            player.InputHandle.SetAttackInputToFalse();
+
+        }
     }
 
     public override void PhysicsUpdate()

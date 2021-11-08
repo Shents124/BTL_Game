@@ -25,22 +25,27 @@ public class PlayerAirState : PlayerState
         if (isGround && player.CurrentVelocity.y < 0.01f)
         {
             stateMachine.ChangeState(player.LandState);
+            player.PlayerRigid.gravityScale = playerData.defaultGravityScale;
         }
         else if (player.InputHandle.IsJumping() && player.JumpState.CanJump())
         {
             stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();
         }
-        else if (player.InputHandle.IsAttacking() && Mathf.Abs(input.x) <= 0.1f)
+        else if (player.InputHandle.IsAttacking())
         {
             stateMachine.ChangeState(player.AttackState);
             player.InputHandle.SetAttackInputToFalse();
         }
-        else
+        else if (player.InputHandle.IsDashing() && player.DashState.CanDash())
         {
-            player.CheckIfShouldFlip(input.x);
-            player.Anim.SetFloat(YVelocity, player.CurrentVelocity.y);
+            stateMachine.ChangeState(player.DashState);
+            player.InputHandle.SetDashInputToFalse();
         }
+
+        player.CheckIfShouldFlip(input.x);
+        player.Anim.SetFloat(YVelocity, player.CurrentVelocity.y);
+
     }
 
     public override void PhysicsUpdate()
@@ -51,6 +56,11 @@ public class PlayerAirState : PlayerState
         {
             player.SetVelocityX(playerData.movementVelocity * input.normalized.x * Time.deltaTime);
         }
+
+        if (player.PlayerRigid.velocity.y < 0)
+            player.PlayerRigid.gravityScale += player.PlayerRigid.gravityScale * Time.deltaTime;
+        else
+            player.PlayerRigid.gravityScale = playerData.defaultGravityScale;
     }
 
 }

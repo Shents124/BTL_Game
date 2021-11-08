@@ -28,14 +28,13 @@ public class PlayerState : State
 
     public override void LogicUpdate()
     {
-        if (player.InputHandle.IsDashing())
-        {
-            stateMachine.ChangeState(player.DashState);
-            player.InputHandle.SetDashInputToFalse();
-        }
-        else if(player.PlayerCombat.GetIsDamaged())
+        if (player.PlayerCombat.GetIsDamaged())
         {
             stateMachine.ChangeState(player.HitState);
+        }
+        else if (player.IsEscaspe == true)
+        {
+            stateMachine.ChangeState(player.Die_EscapeState);
         }
     }
 }

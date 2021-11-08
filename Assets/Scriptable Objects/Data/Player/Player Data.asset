@@ -15,6 +15,8 @@ MonoBehaviour:
   movementVelocity: 250
   jumpVelocity: 11
   amountOfJumps: 2
+  fallMultiplier: 5
+  defaultGravityScale: 3
   jumpEffect: {fileID: 4414733926627515998, guid: ae893597b32b4cd4bb96d73ee23be08b, type: 3}
   landEffect: {fileID: 7712544865901249547, guid: e0ac1d3feea2fb848bbb55cacad4f857, type: 3}
   dame: 1

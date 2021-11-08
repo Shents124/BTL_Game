@@ -19,7 +19,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         currentHealth -= amountOfDame;
         IsDamaged = true;
-
+    
         if (currentHealth <= 0)
         {
             IsDeath = true;
@@ -30,5 +30,4 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         Destroy(this.gameObject);
     }
-
 }

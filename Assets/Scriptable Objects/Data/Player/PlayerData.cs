@@ -9,6 +9,7 @@ public class PlayerData : ScriptableObject
     [Header("Jump State")]
     public float jumpVelocity = 15f;
     public int amountOfJumps = 2;
+    public int defaultGravityScale = 3;
     public GameObject jumpEffect;
     public GameObject landEffect;
 
@@ -20,6 +21,7 @@ public class PlayerData : ScriptableObject
     
 
     [Header("Dash State")]
+    public int amountOfDash = 1;
     public float dashCoolDown = 0.5f;
     public int dashVelocity = 10;
     public float distanceBetweenImages = 0.1f;

@@ -1,12 +1,17 @@
-using UnityEngine;
-public class PlayerAttackState : PlayerAbilityState
+public class PlayerAttackState : PlayerState
 {
-    private Vector2 input;
     private bool isGround;
 
     public PlayerAttackState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        if(player.CheckIfGround())
+            player.SetVelocityX(0);
     }
 
     public override void DoChecks()
@@ -19,13 +24,9 @@ public class PlayerAttackState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        input = player.InputHandle.GetMove();
-
         if (isAnimationFinished)
         {
-            if (input.x != 0)
-                stateMachine.ChangeState(player.MoveState);
-            else if (input.x == 0)
+            if(isGround)
                 stateMachine.ChangeState(player.IdleState);
             else if (isGround == false)
                 stateMachine.ChangeState(player.AirState);

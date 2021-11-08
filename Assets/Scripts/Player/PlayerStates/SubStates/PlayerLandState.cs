@@ -13,10 +13,8 @@ public class PlayerLandState : GroundedState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        if (input.x != 0)
-            stateMachine.ChangeState(player.MoveState);
-        else if (isAnimationFinished)
+         
+        if (isAnimationFinished)
             stateMachine.ChangeState(player.IdleState);
     }
 }

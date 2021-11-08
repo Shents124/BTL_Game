@@ -23,6 +23,9 @@ public class GroundedState : PlayerState
         base.Enter();
         player.JumpState.ResetAmountOfJumpLeft();
         player.InputHandle.SetJumpInputToFalse();
+
+        player.DashState.ResetAmountOfDashLeft();
+        player.InputHandle.SetDashInputToFalse();
     }
 
     public override void LogicUpdate()
@@ -36,19 +39,14 @@ public class GroundedState : PlayerState
             stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();
         }
-        else if (player.InputHandle.IsAttacking() && Mathf.Abs(input.x) <= 0.1f)
-        {
-            stateMachine.ChangeState(player.AttackState);
-            player.InputHandle.SetAttackInputToFalse();
-
-        }
         else if (isGrounded == false)
         {
             stateMachine.ChangeState(player.AirState);
         }
-        else if (player.IsEscaspe == true)
+        else if (player.InputHandle.IsDashing() && player.DashState.CanDash())
         {
-            stateMachine.ChangeState(player.Die_EscapeState);
+            stateMachine.ChangeState(player.DashState);
+            player.InputHandle.SetDashInputToFalse();
         }
     }
 }
