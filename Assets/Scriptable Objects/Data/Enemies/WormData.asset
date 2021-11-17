@@ -19,5 +19,15 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  isHasIdleState: 0
+  idleTime: 0
   maxHealth: 3
+  isHasAttackState: 0
   dame: 1
+  attackRange: 0.24
+  touchDameCountDown: 0.5
+  knockBackVelocity: 7
+  whatIsPlayer:
+    serializedVersion: 2
+    m_Bits: 512
+  distanceDetectPlayer: 0

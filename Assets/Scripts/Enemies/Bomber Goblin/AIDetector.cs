@@ -11,7 +11,7 @@ public class AIDetector : MonoBehaviour
     [SerializeField] private Transform detectorOrigin;
     [SerializeField] private Vector2 detectorSize = Vector2.zero;
     [SerializeField] private Vector2 detectorOriginOffset = Vector2.zero;
-    [SerializeField] private float detectorDelay = 0.1f;
+    //[SerializeField] private float detectorDelay = 0.1f;
     [SerializeField] private LayerMask detectorLayerMask;
 
     [Header("Gizmo variables")]

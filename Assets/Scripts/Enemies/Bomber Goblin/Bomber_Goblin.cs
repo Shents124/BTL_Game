@@ -20,7 +20,7 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
     private Vector2 direction;
     private AIDetector aIDetector;
     private Animator animator;
-    private EnemyHealth enemyHealth;
+    private EnemyCombat enemyHealth;
     private float currentHealth;
 
     private int facingDirection;
@@ -35,7 +35,7 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
     void Start()
     {
         animator = GetComponent<Animator>();
-        enemyHealth = GetComponent<EnemyHealth>();
+        enemyHealth = GetComponent<EnemyCombat>();
         aIDetector = GetComponent<AIDetector>();
         currentHealth = enemyData.maxHealth;
         facingDirection = 1;

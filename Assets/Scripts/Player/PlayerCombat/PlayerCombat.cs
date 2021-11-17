@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerCombat : MonoBehaviour, IDamageable
+public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
 {
     [Header("Health Variables")]
     [SerializeField] private FloatVariable currentHealth;
@@ -10,6 +10,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable
     [SerializeField] private Transform attackPointPos;
     [SerializeField] private PlayerData playerData;
 
+    private Player player;
     private bool isDamaged;
     private bool isDeath;
 
@@ -18,21 +19,24 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         if (currentHealth.value <= 0)
             currentHealth.value = maxHealth.value;
 
+        player = GetComponent<Player>();
+
         isDamaged = false;
         isDeath = false;
     }
 
     public void DoingDamage()
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPointPos.position, playerData.attackRange, playerData.whatIsEnemy);
+        Collider2D[] hitEnemies =
+        Physics2D.OverlapCapsuleAll(attackPointPos.position, playerData.attackSize, CapsuleDirection2D.Horizontal, playerData.angle, playerData.whatIsEnemy);
 
         if (hitEnemies.Length > 0)
         {
-            Instantiate(playerData.hitEffect, attackPointPos.position, Quaternion.identity);
-
             foreach (Collider2D enemy in hitEnemies)
             {
+                Instantiate(playerData.hitEffect, attackPointPos.transform.position, Quaternion.identity);
                 enemy.GetComponent<IDamageable>().TakeDame(playerData.dame);
+                //enemy.GetComponent<IKnockbackable>().KnockBack(player.FacingDirection * playerData.knockBackVelocity);
             }
         }
     }
@@ -42,18 +46,18 @@ public class PlayerCombat : MonoBehaviour, IDamageable
         currentHealth.value -= amountOfDame;
         isDamaged = true;
 
-        if(currentHealth.value <= 0)
+        if (currentHealth.value <= 0)
         {
             Death();
         }
     }
 
-    private void Death()
-    {
-        isDeath = true;
-    }
-
+    private void Death() => isDeath = true;
     public bool GetIsDamaged() => isDamaged;
     public void SetIsDamaged(bool value) => isDamaged = value;
 
+    public void KnockBack(float velocity)
+    {
+        player.SetVelocityX(velocity * -player.FacingDirection);
+    } 
 }

@@ -14,7 +14,10 @@ public class PlayerData : ScriptableObject
     public GameObject landEffect;
 
     [Header("Attack State")]
+    public float knockBackVelocity = 10f;
     public int dame = 1;
+    public Vector2 attackSize;
+    public float angle;
     public float attackRange;
     public LayerMask whatIsEnemy;
     public GameObject hitEffect;

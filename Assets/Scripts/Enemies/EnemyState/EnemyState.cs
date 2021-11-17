@@ -22,11 +22,11 @@ public class EnemyState : State
     {
         base.LogicUpdate();
 
-        if (entityEnemy.EnemyHealth.IsDeath)
+        if (entityEnemy.EnemyCombat.IsDeath)
         {
             stateMachine.ChangeState(entityEnemy.DeathState);
         }
-        else if (entityEnemy.EnemyHealth.IsDamaged && entityEnemy.EnemyHealth.IsDeath == false)
+        else if (entityEnemy.EnemyCombat.IsDamaged && entityEnemy.EnemyCombat.IsDeath == false)
         {
             stateMachine.ChangeState(entityEnemy.HitState);
         }

@@ -23,7 +23,7 @@ public class EntityEnemy : MonoBehaviour
     #region Componets Varibles
     public Animator Anim { get; private set; }
     public Rigidbody2D EnemyRigid { get; private set; }
-    public EnemyHealth EnemyHealth { get; private set; }
+    public EnemyCombat EnemyCombat { get; private set; }
 
     public Vector2 CurrentVelocity { get; private set; }
     public int FacingDirection { get; private set; }
@@ -57,7 +57,7 @@ public class EntityEnemy : MonoBehaviour
     {
         Anim = GetComponent<Animator>();
         EnemyRigid = GetComponent<Rigidbody2D>();
-        EnemyHealth = GetComponent<EnemyHealth>();
+        EnemyCombat = GetComponent<EnemyCombat>();
         StateMachine.Initialize(MoveState);
         FacingDirection = 1;
         xPos = transform.position.x;

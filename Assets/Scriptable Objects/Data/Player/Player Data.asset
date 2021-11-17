@@ -15,19 +15,22 @@ MonoBehaviour:
   movementVelocity: 250
   jumpVelocity: 11
   amountOfJumps: 2
-  fallMultiplier: 5
   defaultGravityScale: 3
   jumpEffect: {fileID: 4414733926627515998, guid: ae893597b32b4cd4bb96d73ee23be08b, type: 3}
   landEffect: {fileID: 7712544865901249547, guid: e0ac1d3feea2fb848bbb55cacad4f857, type: 3}
+  knockBackVelocity: 10
   dame: 1
+  attackSize: {x: 0.8, y: 0.55}
+  angle: 0.1
   attackRange: 0.35
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 1024
   hitEffect: {fileID: 180976062625323815, guid: 469813a091585ac49a9e814209365b20, type: 3}
-  dashCoolDown: 0.2
-  dashVelocity: 682
-  distanceBetweenImages: 0.4
+  amountOfDash: 1
+  dashCoolDown: 0.15
+  dashVelocity: 600
+  distanceBetweenImages: 0.5
   whatIsPush:
     serializedVersion: 2
     m_Bits: 128

@@ -8,26 +8,15 @@ public class EnemyHitState : EnemyState
     public override void Enter()
     {
         base.Enter();
-        lastVelocity = entityEnemy.EnemyRigid.velocity.x;
-       // entityEnemy.SetVelocityX(0);
+        //lastVelocity = entityEnemy.EnemyRigid.velocity.x;
+        //entityEnemy.SetVelocityX(0);
+        
     }
 
     public override void AnimationFinishTrigger()
     {
         base.AnimationFinishTrigger();
-        entityEnemy.EnemyHealth.IsDamaged = false;
+        entityEnemy.EnemyCombat.IsDamaged = false;
         stateMachine.ChangeState(entityEnemy.MoveState);
     }
-
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
-        
-        if (entityEnemy.EnemyHealth.IsDamaged)
-        {
-            stateMachine.ChangeState(entityEnemy.HitState);
-        }
-    }
-
-
 }

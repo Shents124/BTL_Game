@@ -15,6 +15,6 @@ public class EnemyDeathState : EnemyState
     }
     public override void AnimationFinishTrigger()
     {
-        entityEnemy.EnemyHealth.DestroyEnemy();
+        entityEnemy.EnemyCombat.DestroyEnemy();
     }
 }

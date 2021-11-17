@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 8646642300278848660}
   - component: {fileID: 8646642300278848661}
   - component: {fileID: 8646642300278848658}
-  - component: {fileID: 8646642300278848664}
   - component: {fileID: 8646642300278848667}
+  - component: {fileID: 1333136145}
   m_Layer: 10
   m_Name: Worm
   m_TagString: Untagged
@@ -110,7 +110,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!61 &8646642300278848660
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -121,7 +121,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0053105354, y: -0.09027916}
@@ -172,19 +172,6 @@ MonoBehaviour:
   groundCheckPos: {fileID: 8646642301332511355}
   attackPos: {fileID: 0}
   enemyData: {fileID: 11400000, guid: 26ed39b5aecd44844ac611b001c33bc3, type: 2}
---- !u!114 &8646642300278848664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8646642300278848659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ccff8f337d2afb4aad48b3aac37d056, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 26ed39b5aecd44844ac611b001c33bc3, type: 2}
 --- !u!114 &8646642300278848667
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,6 +182,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8af88c30a1689f340a188f8e676337ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyData: {fileID: 11400000, guid: 26ed39b5aecd44844ac611b001c33bc3, type: 2}
+--- !u!114 &1333136145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8646642300278848659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097c5d26005114e4d8a304f0c830ff6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enemyData: {fileID: 11400000, guid: 26ed39b5aecd44844ac611b001c33bc3, type: 2}
