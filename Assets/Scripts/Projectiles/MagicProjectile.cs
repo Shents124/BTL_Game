@@ -42,6 +42,8 @@ public class MagicProjectile : MonoBehaviour
     {
         animator.SetTrigger("Explosion");
         isExposion = true;
+        if (other.CompareTag("Player"))
+            other.GetComponent<PlayerCombat>().TakeDame(1, Vector3.zero);
     }
 
     private void Destroy() => Destroy(gameObject);

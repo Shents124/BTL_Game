@@ -3,24 +3,17 @@ using UnityEngine;
 public class Boss_Combat : MonoBehaviour, IDamageable
 {
     public int maxHealth;
-    private int currentHealth;
+    [SerializeField] private FloatVariable currentHealth;
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        currentHealth = maxHealth;
+        currentHealth.value = maxHealth;
+    }
+    
+    public void TakeDame(int amountOfDame, Vector3 damePos)
+    {
+        currentHealth.value -= amountOfDame;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    public void TakeDame(int amountOfDame)
-    {
-        currentHealth -= maxHealth;
-        if (currentHealth <= 0)
-            currentHealth = maxHealth;
-    }
+    public float GetCurrentHealth() => currentHealth.value;
 }

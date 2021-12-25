@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7782114370147491677}
   - component: {fileID: 7782114370147491676}
   - component: {fileID: 7782114370147491675}
-  - component: {fileID: 1740501892414518861}
   - component: {fileID: 947654873150719014}
   - component: {fileID: -5356249300668294147}
+  - component: {fileID: 495783127618882089}
   m_Layer: 12
   m_Name: Magic_Attack
   m_TagString: Untagged
@@ -106,22 +106,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!58 &1740501892414518861
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7782114370147491674}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.18709433, y: -0.037418842}
-  serializedVersion: 2
-  m_Radius: 0.7819749
 --- !u!114 &947654873150719014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,10 +118,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ae64fa8ab8957499286a4e7936dffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0, z: 0}
   rotationSpeed: 50
   speed: 500
-  dir: {x: 0, y: 0, z: 0}
+  dir: {x: 0, y: 0}
 --- !u!50 &-5356249300668294147
 Rigidbody2D:
   serializedVersion: 4
@@ -159,3 +142,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!70 &495783127618882089
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7782114370147491674}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.6788781, y: -0.43280494}
+  m_Size: {x: 1.2622979, y: 0.34096894}
+  m_Direction: 1

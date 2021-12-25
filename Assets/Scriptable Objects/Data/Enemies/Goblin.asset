@@ -23,8 +23,9 @@ MonoBehaviour:
   idleTime: 0
   maxHealth: 5
   isHasAttackState: 1
-  dame: 2
+  dame: 1
   attackRange: 0.15
+  knockBackVelocity: 7
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 512

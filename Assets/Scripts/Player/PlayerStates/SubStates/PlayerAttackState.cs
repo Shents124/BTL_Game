@@ -36,5 +36,6 @@ public class PlayerAttackState : PlayerState
     public override void AnimationTrigger()
     {    
         player.PlayerCombat.DoingDamage();
+        player.PlayAttackingSound();
     }
 }

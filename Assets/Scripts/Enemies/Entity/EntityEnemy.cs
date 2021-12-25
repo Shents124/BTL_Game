@@ -24,7 +24,6 @@ public class EntityEnemy : MonoBehaviour
     public Animator Anim { get; private set; }
     public Rigidbody2D EnemyRigid { get; private set; }
     public EnemyCombat EnemyCombat { get; private set; }
-
     public Vector2 CurrentVelocity { get; private set; }
     public int FacingDirection { get; private set; }
     #endregion
@@ -36,7 +35,7 @@ public class EntityEnemy : MonoBehaviour
     [SerializeField] protected Transform attackPos;
     [SerializeField] protected EnemyData enemyData;
     private Vector2 workspace;
-    private float xPos;
+    public float xStartPos;
     #endregion
 
     protected virtual void Awake()
@@ -60,7 +59,7 @@ public class EntityEnemy : MonoBehaviour
         EnemyCombat = GetComponent<EnemyCombat>();
         StateMachine.Initialize(MoveState);
         FacingDirection = 1;
-        xPos = transform.position.x;
+        xStartPos = gameObject.transform.position.x;
     }
 
     protected virtual void Update()
@@ -102,7 +101,7 @@ public class EntityEnemy : MonoBehaviour
         transform.localScale = _scale;
     }
 
-    public float GetXStartPos() => xPos;
+    public float GetXStartPos() => xStartPos;
     private void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
 
     private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
@@ -124,7 +123,8 @@ public class EntityEnemy : MonoBehaviour
             {
                 foreach (Collider2D player in hitPlayer)
                 {
-                    player.GetComponent<IDamageable>().TakeDame(enemyData.dame);
+                    player.GetComponent<IDamageable>().TakeDame(enemyData.dame, Vector3.zero);
+                    player.GetComponent<IKnockbackable>().KnockBack(enemyData.knockBackVelocity);
                 }
             }
         }

@@ -11,7 +11,7 @@ public class EnemyDeathState : EnemyState
         entityEnemy.SetVelocityX(0);
         
         if(enemyData.isHasAttackState == false)
-            entityEnemy.GetComponent<EnemyDamageable>().enabled = false;
+            entityEnemy.GetComponent<EnemyCombat>().enabled = false;
     }
     public override void AnimationFinishTrigger()
     {

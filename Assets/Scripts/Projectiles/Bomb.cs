@@ -34,7 +34,7 @@ public class Bomb : MonoBehaviour
 
     private void UpdateTimeCountDown()
     {
-       // txtCountDown.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
+        // txtCountDown.transform.position = Camera.main.WorldToScreenPoint(transform.parent.position + offset);
         currentTime -= 1 * Time.deltaTime;
         txtCountDown.text = currentTime.ToString("0");
     }
@@ -51,7 +51,7 @@ public class Bomb : MonoBehaviour
         if (hits != null)
         {
             foreach (var collider in hits)
-                collider.GetComponent<IDamageable>().TakeDame(dame);
+                collider.GetComponent<IDamageable>().TakeDame(dame, Vector3.zero);
         }
     }
 

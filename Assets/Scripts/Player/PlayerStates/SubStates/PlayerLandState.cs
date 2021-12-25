@@ -1,3 +1,4 @@
+
 public class PlayerLandState : GroundedState
 {
     public PlayerLandState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
@@ -9,7 +10,9 @@ public class PlayerLandState : GroundedState
     {
         base.Enter();
         player.InstantiateEffect(playerData.landEffect);
+        player.PlayLandingSound();
     }
+    
     public override void LogicUpdate()
     {
         base.LogicUpdate();

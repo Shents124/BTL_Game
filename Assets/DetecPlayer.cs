@@ -1,8 +1,10 @@
-
+using UnityEngine.Events;
 using UnityEngine;
 
 public class DetecPlayer : MonoBehaviour
 {
+    public UnityEvent OnTrigger;
+    public UnityEvent OnExit;
     public GameObject Player;
     public Vector3 playerPos;
 
@@ -20,6 +22,15 @@ public class DetecPlayer : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Player = other.gameObject;
+            OnTrigger?.Invoke();
+           // playerPos = Player.transform.position;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D other) {
+        if (other.CompareTag("Player"))
+        {
+            Player = null;
+            OnExit?.Invoke();
            // playerPos = Player.transform.position;
         }
     }

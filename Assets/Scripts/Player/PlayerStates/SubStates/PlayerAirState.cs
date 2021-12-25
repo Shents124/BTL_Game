@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerAirState : PlayerState
 {
     private const string YVelocity = "yVelocity";
@@ -27,7 +26,7 @@ public class PlayerAirState : PlayerState
             stateMachine.ChangeState(player.LandState);
             player.PlayerRigid.gravityScale = playerData.defaultGravityScale;
         }
-        else if (player.InputHandle.IsJumping() && player.JumpState.CanJump())
+        else if (player.InputHandle.IsJumping() && player.amountOfJumpsLeft > 0)
         {
             stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();

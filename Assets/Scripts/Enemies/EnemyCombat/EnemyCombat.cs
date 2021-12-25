@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour, IDamageable, IKnockbackable
 {
+    public GameObject hitEffect;
     public bool IsDamaged { get; set; }
     public bool IsDeath { get; private set; }
     [SerializeField] private EnemyData enemyData;
@@ -23,13 +24,14 @@ public class EnemyCombat : MonoBehaviour, IDamageable, IKnockbackable
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<IDamageable>().TakeDame(enemyData.dame);
+            other.gameObject.GetComponent<IDamageable>().TakeDame(enemyData.dame, Vector3.zero);
             other.gameObject.GetComponent<IKnockbackable>().KnockBack(enemyData.knockBackVelocity);
         }
     }
 
-    public void TakeDame(int amountOfDame)
+    public void TakeDame(int amountOfDame, Vector3 damePos)
     {
+        Instantiate(hitEffect, damePos, Quaternion.identity);
         currentHealth -= amountOfDame;
         IsDamaged = true;
 

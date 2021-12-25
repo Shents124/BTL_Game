@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4896251377838087482}
   - component: {fileID: 4896251377838087485}
   - component: {fileID: 4896251377838087484}
-  - component: {fileID: 4896251377838087483}
+  - component: {fileID: 8458517204106543743}
   m_Layer: 10
   m_Name: Slime
   m_TagString: Untagged
@@ -169,7 +169,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.38}
@@ -191,7 +191,7 @@ MonoBehaviour:
   groundCheckPos: {fileID: 4896251376750662570}
   attackPos: {fileID: 0}
   enemyData: {fileID: 11400000, guid: b359298b3926be440948f37d240a966e, type: 2}
---- !u!114 &4896251377838087483
+--- !u!114 &8458517204106543743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -200,7 +200,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4896251377838087456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8af88c30a1689f340a188f8e676337ce, type: 3}
+  m_Script: {fileID: 11500000, guid: 097c5d26005114e4d8a304f0c830ff6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffect: {fileID: 180976062625323815, guid: 469813a091585ac49a9e814209365b20, type: 3}
   enemyData: {fileID: 11400000, guid: b359298b3926be440948f37d240a966e, type: 2}

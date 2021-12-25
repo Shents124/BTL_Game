@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class EnemyMoveState : EnemyState
 {
-    private float xStartPos;
     private float xCurrentPos;
 
     public EnemyMoveState(EntityEnemy entityEnemy, StateMachine stateMachine, EnemyData enemyData, string animBoolName) : base(entityEnemy, stateMachine, enemyData, animBoolName)
@@ -10,17 +9,11 @@ public class EnemyMoveState : EnemyState
 
     }
 
-    public override void Enter()
-    {
-        base.Enter();
-        xStartPos = entityEnemy.GetXStartPos();
-    }
-
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
-        xCurrentPos = entityEnemy.transform.position.x;
+        xCurrentPos = entityEnemy.gameObject.transform.position.x;
 
         if (enemyData.isOnFloatStone)
         {
@@ -34,8 +27,8 @@ public class EnemyMoveState : EnemyState
         }
         else
         {
-            if ((xCurrentPos - xStartPos) >= enemyData.xDistance && entityEnemy.FacingDirection == 1 ||
-                (xCurrentPos - xStartPos) <= -enemyData.xDistance && entityEnemy.FacingDirection == -1)
+            if ((xCurrentPos - entityEnemy.xStartPos) >= enemyData.xDistance && entityEnemy.FacingDirection == 1 ||
+                (xCurrentPos - entityEnemy.xStartPos) <= -enemyData.xDistance && entityEnemy.FacingDirection == -1)
             {
                 if (enemyData.isHasIdleState)
                     stateMachine.ChangeState(entityEnemy.IdleState);

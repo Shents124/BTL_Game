@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
 {
+    public UnityEvent OnUpdateHealthUI;
+    public bool isDeath;
+
     [Header("Health Variables")]
     [SerializeField] private FloatVariable currentHealth;
     [SerializeField] private FloatVariable maxHealth;
@@ -10,16 +14,20 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
     [SerializeField] private Transform attackPointPos;
     [SerializeField] private PlayerData playerData;
 
+
     private Player player;
     private bool isDamaged;
-    private bool isDeath;
+
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+    }
 
     private void Start()
     {
         if (currentHealth.value <= 0)
             currentHealth.value = maxHealth.value;
-
-        player = GetComponent<Player>();
 
         isDamaged = false;
         isDeath = false;
@@ -34,30 +42,39 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
         {
             foreach (Collider2D enemy in hitEnemies)
             {
-                Instantiate(playerData.hitEffect, attackPointPos.transform.position, Quaternion.identity);
-                enemy.GetComponent<IDamageable>().TakeDame(playerData.dame);
+                //Instantiate(playerData.hitEffect, attackPointPos.transform.position, Quaternion.identity);
+                enemy.GetComponent<IDamageable>().TakeDame(playerData.dame, attackPointPos.transform.position);
                 //enemy.GetComponent<IKnockbackable>().KnockBack(player.FacingDirection * playerData.knockBackVelocity);
             }
         }
     }
 
-    public void TakeDame(int amountOfDame)
+    public void TakeDame(int amountOfDame, Vector3 damePos)
     {
-        currentHealth.value -= amountOfDame;
-        isDamaged = true;
-
-        if (currentHealth.value <= 0)
+        if (currentHealth.value >= 0)
         {
-            Death();
+            currentHealth.value -= amountOfDame;
+            OnUpdateHealthUI?.Invoke();
+            isDamaged = true;
+        }
+
+        if (currentHealth.value <= 0 && isDeath == false)
+        {
+            currentHealth.value = 0;
+            isDeath = true;
+            StartCoroutine(player.DieRespawnCoroutine());
         }
     }
 
-    private void Death() => isDeath = true;
     public bool GetIsDamaged() => isDamaged;
     public void SetIsDamaged(bool value) => isDamaged = value;
 
     public void KnockBack(float velocity)
     {
         player.SetVelocityX(velocity * -player.FacingDirection);
-    } 
+    }
+
+    public void ResetHeath() => currentHealth.value = maxHealth.value;
+
+    public int GetCurrentHealth() => currentHealth.value;
 }

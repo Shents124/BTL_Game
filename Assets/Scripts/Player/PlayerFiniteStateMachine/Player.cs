@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
     #region Animaion variables
     private const string Idle = "idle";
     private const string Move = "move";
@@ -27,7 +29,7 @@ public class Player : MonoBehaviour
     public PlayerDashState DashState { get; private set; }
     public PlayerHitState HitState { get; private set; }
 
-    [HideInInspector]
+    //[HideInInspector]
     public int amountOfJumpsLeft;
     #endregion
 
@@ -44,14 +46,26 @@ public class Player : MonoBehaviour
     public Vector2 CurrentVelocity { get; private set; }
     public int FacingDirection { get; private set; }
     public bool IsEscaspe { get; private set; }
+    public Transform startingPostion;
+
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform pushCheck;
     [SerializeField] private Transform jumpEffectPos;
     [SerializeField] PhysicsMaterial2D bounci;
     [SerializeField] private PlayerData playerData;
     private Vector2 workspace;
+    [SerializeField] private SavePoint lastSavePoint;
     #endregion
 
+    #region Audio Variables
+    public RandomAudioPlayer footstepAudioPlayer;
+    public RandomAudioPlayer landingAudioPlayer;
+    public RandomAudioPlayer jumpingAudioPlayer;
+    public RandomAudioPlayer attackingAudioPlayer;
+    public RandomAudioPlayer dashingAudioPlayer;
+    public RandomAudioPlayer gameoverAuidoPlayer;
+    public AudioManager audioManager;
+    #endregion
     private void Awake()
     {
         StateMachine = new PlayerStateMachine();
@@ -160,4 +174,58 @@ public class Player : MonoBehaviour
         InstantiateEffect(playerData.jumpEffect);
         amountOfJumpsLeft = playerData.amountOfJumps - 1;
     }
+
+    public IEnumerator DieRespawnCoroutine()
+    {
+        InputHandle.canGetInput = false;
+        yield return StartCoroutine(ScreenFader.FadeSceneOut(PlayerCombat.GetCurrentHealth() > 0 ? ScreenFader.FadeType.Black : ScreenFader.FadeType.GameOver));
+
+        if (PlayerCombat.GetCurrentHealth() <= 0)
+        {  
+            audioManager.StopAllAudio();
+            gameoverAuidoPlayer.PlayRandomSound();
+            EventBroker.CallOnPlayerDead();
+            yield return new WaitForSeconds(2f);  
+        }
+
+        Respawn();
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(ScreenFader.FadeSceneIn());
+        yield return new WaitForEndOfFrame();
+        audioManager.PlayMainMusic();
+        InputHandle.canGetInput = true;
+    }
+
+    public void Respawn()
+    {
+        if (PlayerCombat.GetCurrentHealth() <= 0)
+        {
+            PlayerCombat.ResetHeath();
+            PlayerCombat.OnUpdateHealthUI?.Invoke();
+            PlayerCombat.isDeath = false;
+        }
+
+
+        if (lastSavePoint != null)
+        {
+            GameObjectTeleporter.Teleport(gameObject, lastSavePoint.transform.position);
+        }
+        else
+        {
+            GameObjectTeleporter.Teleport(gameObject, startingPostion);
+        }
+
+
+    }
+
+    public void SetSavePoint(SavePoint savePoint) => lastSavePoint = savePoint;
+
+    public void PlayFootstep()
+    {
+        footstepAudioPlayer.PlayRandomSound();
+    }
+    public void PlayLandingSound() => landingAudioPlayer.PlayRandomSound();
+    public void PlayJumpingSound() => jumpingAudioPlayer.PlayRandomSound();
+    public void PlayAttackingSound() => attackingAudioPlayer.PlayRandomSound();
+    public void PlayDashingSound() => dashingAudioPlayer.PlayRandomSound();
 }

@@ -64,7 +64,7 @@ public class Bomber_Goblin : MonoBehaviour, IDamageable
             Flip();
     }
 
-    public void TakeDame(int amountOfDame)
+    public void TakeDame(int amountOfDame,Vector3 damePos)
     {
         // currentHealth -= amountOfDame;
         if (currentHealth != 0)

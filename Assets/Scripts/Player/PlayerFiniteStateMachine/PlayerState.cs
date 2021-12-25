@@ -20,7 +20,7 @@ public class PlayerState : State
         base.Enter();
         player.Anim.SetBool(animBoolName, true);
     }
-
+    
     public override void Exit()
     {
         player.Anim.SetBool(animBoolName, false);
@@ -32,7 +32,7 @@ public class PlayerState : State
         {
             stateMachine.ChangeState(player.HitState);
         }
-        else if (player.IsEscaspe == true)
+        else if (player.PlayerCombat.isDeath == true)
         {
             stateMachine.ChangeState(player.Die_EscapeState);
         }

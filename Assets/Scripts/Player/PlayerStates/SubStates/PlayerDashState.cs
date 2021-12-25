@@ -14,6 +14,7 @@ public class PlayerDashState : PlayerState
     {
         base.Enter();
         player.InstantiateEffect(playerData.jumpEffect);
+        player.PlayDashingSound();
         player.SetGravity(0);
         PlaceAfterimage();
         amountOfDashLeft--;

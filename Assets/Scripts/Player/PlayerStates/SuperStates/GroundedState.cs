@@ -34,7 +34,7 @@ public class GroundedState : PlayerState
 
         input = player.InputHandle.GetMove();
 
-        if (player.InputHandle.IsJumping() && player.JumpState.CanJump())
+        if (player.InputHandle.IsJumping())
         {
             stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();

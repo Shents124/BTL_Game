@@ -41,10 +41,9 @@ GameObject:
   - component: {fileID: 6066029438063862568}
   - component: {fileID: 6066029438063862569}
   - component: {fileID: 6066029438063862574}
-  - component: {fileID: 6066029438063862575}
-  - component: {fileID: 6066029438063862573}
   - component: {fileID: 6066029438063862570}
   - component: {fileID: 6066029438063862571}
+  - component: {fileID: 6066029438063862575}
   - component: {fileID: 861203609}
   m_Layer: 10
   m_Name: Mushroom
@@ -139,35 +138,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6066029438063862575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066029438063862562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c832ffa01268c74398076aa2d939944, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDetectPlayer: 0
-  groundCheckPos: {fileID: 6066029437479358692}
-  attackPos: {fileID: 0}
-  enemyData: {fileID: 11400000, guid: 180fe0eab5b16d84192ff646accbf9a4, type: 2}
---- !u!114 &6066029438063862573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6066029438063862562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8af88c30a1689f340a188f8e676337ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 180fe0eab5b16d84192ff646accbf9a4, type: 2}
 --- !u!61 &6066029438063862570
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -215,6 +185,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &6066029438063862575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6066029438063862562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c832ffa01268c74398076aa2d939944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isDetectPlayer: 0
+  groundCheckPos: {fileID: 6066029437479358692}
+  attackPos: {fileID: 0}
+  enemyData: {fileID: 11400000, guid: 180fe0eab5b16d84192ff646accbf9a4, type: 2}
 --- !u!114 &861203609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,4 +213,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 097c5d26005114e4d8a304f0c830ff6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitEffect: {fileID: 180976062625323815, guid: 469813a091585ac49a9e814209365b20, type: 3}
   enemyData: {fileID: 11400000, guid: 180fe0eab5b16d84192ff646accbf9a4, type: 2}
