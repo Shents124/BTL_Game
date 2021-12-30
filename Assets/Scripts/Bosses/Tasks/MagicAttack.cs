@@ -5,6 +5,7 @@ using BehaviorDesigner.Runtime;
 public class MagicAttack : ActionBoss
 {
     public GameObject magicPrefab;
+    public RandomAudioPlayer attackAudio;
     public Transform attackPos;
     public float attackDelay = 0.2f;
     public DetecPlayer detecPlayer;
@@ -31,6 +32,7 @@ public class MagicAttack : ActionBoss
     IEnumerator Attack()
     {
         yield return new WaitForSeconds(attackDelay);
+        attackAudio.PlayRandomSound();
         var magic = Object.Instantiate(magicPrefab, attackPos.position, Quaternion.identity);
         magic.GetComponent<MagicProjectile>().dir = (target - magic.transform.position).normalized;
         isDone = true;

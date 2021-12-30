@@ -41,7 +41,7 @@ public class Teleport : ActionBoss
     private void ChangePosition()
     {
         index = Random.Range(0, teleportPostions.Length);
-        //SetFacingDirection(index);
+        SetFacingDirection(index);
         this.transform.position = teleportPostions[index].position;
     }
 
@@ -55,11 +55,10 @@ public class Teleport : ActionBoss
 
     private void CheckFlip()
     {
-        float distance = transform.position.x;
-
+        
         var facingRight = (SharedInt)GlobalVariables.Instance.GetVariable("FacingRight");
 
-        if (distance > 0 && facingRight.Value == 1 || distance < 0 && facingRight.Value == -1)
+        if (index > 0 && facingRight.Value == 1 || index <= 0 && facingRight.Value == -1)
             Flip();
     }
 }

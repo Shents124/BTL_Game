@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Move : ActionBoss
 {
-    public float speed;
+    public SharedFloat _speed;
     public Transform[] targets;
     public bool firstMove = false;
     private Transform target;
@@ -33,7 +33,7 @@ public class Move : ActionBoss
         if (Vector3.SqrMagnitude(transform.position - target.position) < 0.5)
             return TaskStatus.Success;
 
-        transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target.position, _speed.Value * Time.deltaTime);
 
         return TaskStatus.Running;
     }

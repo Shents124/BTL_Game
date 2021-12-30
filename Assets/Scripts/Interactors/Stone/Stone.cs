@@ -14,13 +14,11 @@ public class Stone : MonoBehaviour, IDamageable
     {
         EventBroker.OnPushing += OnMove;
         EventBroker.OnStopPushing += OnStop;
-        EventBroker.OnPlayerDead += Respawn;
     }
     private void OnDisable()
     {
         EventBroker.OnPushing -= OnMove;
         EventBroker.OnStopPushing -= OnStop;
-        EventBroker.OnPlayerDead -= Respawn;
     }
     void Start()
     {

@@ -8,15 +8,9 @@ public class CinemachineSwitcher : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private PlayerInputHandle playerInputHandle;
 
-    private bool isSwitch = false;
-
     public void SwitchCamera()
     {
-        if (isSwitch == false)
-        {
-            StartCoroutine("SwitchBetweenTwoCamera");
-            isSwitch = true;
-        }
+        StartCoroutine("SwitchBetweenTwoCamera");
     }
 
     IEnumerator SwitchBetweenTwoCamera()
@@ -37,5 +31,10 @@ public class CinemachineSwitcher : MonoBehaviour
         virtualCamera.Priority = secondCamPriority;
 
         yield return null;
+    }
+
+    public void ChangeFieldOFView(float value)
+    {
+        cameraFollowPlayer.m_Lens.FieldOfView = value;
     }
 }

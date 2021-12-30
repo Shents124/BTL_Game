@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     #endregion
 
     #region Others variables
-
+    public PlayerSavePos playerSavePos;
     public Vector2 CurrentVelocity { get; private set; }
     public int FacingDirection { get; private set; }
     public bool IsEscaspe { get; private set; }
@@ -64,6 +64,7 @@ public class Player : MonoBehaviour
     public RandomAudioPlayer attackingAudioPlayer;
     public RandomAudioPlayer dashingAudioPlayer;
     public RandomAudioPlayer gameoverAuidoPlayer;
+    public RandomAudioPlayer loseHPAuidoPlayer;
     public AudioManager audioManager;
     #endregion
     private void Awake()
@@ -81,6 +82,10 @@ public class Player : MonoBehaviour
         HitState = new PlayerHitState(this, StateMachine, playerData, Hit);
 
         amountOfJumpsLeft = playerData.amountOfJumps;
+        if(playerSavePos.Load() == Vector3.zero)
+            this.transform.position = startingPostion.position;
+        else 
+            this.transform.position = playerSavePos.Load();
     }
 
     private void Start()
@@ -179,20 +184,18 @@ public class Player : MonoBehaviour
     {
         InputHandle.canGetInput = false;
         yield return StartCoroutine(ScreenFader.FadeSceneOut(PlayerCombat.GetCurrentHealth() > 0 ? ScreenFader.FadeType.Black : ScreenFader.FadeType.GameOver));
-
         if (PlayerCombat.GetCurrentHealth() <= 0)
         {  
-            audioManager.StopAllAudio();
-            gameoverAuidoPlayer.PlayRandomSound();
-            EventBroker.CallOnPlayerDead();
-            yield return new WaitForSeconds(2f);  
+            yield return new WaitForEndOfFrame();
+            SceneController.Instance.LoadSceneWithName();
         }
 
         Respawn();
         yield return new WaitForEndOfFrame();
         yield return StartCoroutine(ScreenFader.FadeSceneIn());
         yield return new WaitForEndOfFrame();
-        audioManager.PlayMainMusic();
+        if(audioManager != null)
+            audioManager.PlayMainMusic();
         InputHandle.canGetInput = true;
     }
 

@@ -5,7 +5,8 @@ public class SavePoint : MonoBehaviour
 {
     Animator animator;
     public bool respawnFacingRight;
-
+    public RandomAudioPlayer savingAudio;
+    public bool isSavePos = true;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -21,10 +22,12 @@ public class SavePoint : MonoBehaviour
 
         if (player != null)
         {
-            //set check point
             player.SetSavePoint(this);
             animator.SetTrigger("Saving");
-            //save data
+            savingAudio.PlayRandomSound();
+            
+            if(isSavePos)
+                EventBroker.CallOnSavePlayerPos(this);
         }
     }
 

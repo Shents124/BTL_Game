@@ -28,23 +28,10 @@ public class ScreenFader : MonoBehaviour
 
     public CanvasGroup faderCanvasGroup;
     public CanvasGroup gameOverCanvasGroup;
-
-    public float fadeDuration = 1f;
-
+    public CanvasGroup gameVictoryCanvasGroup;
     const int k_MaxSortingLayer = 32767;
 
-    private void Awake()
-    {
-        if (_instance != null)
-        {
-            Destroy(this);
-            return;
-        }
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
-    protected IEnumerator Fade(float finalAlpha, CanvasGroup canvasGroup)
+    protected IEnumerator Fade(float finalAlpha, CanvasGroup canvasGroup, float fadeDuration)
     {
         isFading = true;
         canvasGroup.blocksRaycasts = true;
@@ -68,12 +55,17 @@ public class ScreenFader : MonoBehaviour
     public static IEnumerator FadeSceneIn()
     {
         CanvasGroup canvasGroup;
+        float fadeDuration = 1f;
         if (Instance.faderCanvasGroup.alpha > 0.1f)
             canvasGroup = Instance.faderCanvasGroup;
         else
+        {
             canvasGroup = Instance.gameOverCanvasGroup;
+            fadeDuration = 2f;
+        }
 
-        yield return Instance.StartCoroutine(Instance.Fade(0, canvasGroup));
+
+        yield return Instance.StartCoroutine(Instance.Fade(0, canvasGroup, fadeDuration));
 
         canvasGroup.gameObject.SetActive(false);
     }
@@ -81,12 +73,25 @@ public class ScreenFader : MonoBehaviour
     public static IEnumerator FadeSceneOut(FadeType fadeType = FadeType.Black)
     {
         CanvasGroup canvasGroup;
+        float fadeDuration = 1f;
         if (fadeType == FadeType.Black)
             canvasGroup = Instance.faderCanvasGroup;
         else
+        {
             canvasGroup = Instance.gameOverCanvasGroup;
+            fadeDuration = 2f;
+        }
+
 
         canvasGroup.gameObject.SetActive(true);
-        yield return Instance.StartCoroutine(Instance.Fade(1, canvasGroup));
+        yield return Instance.StartCoroutine(Instance.Fade(1, canvasGroup, fadeDuration));
+    }
+
+    public static IEnumerator FadeVictoryOut(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Instance.gameVictoryCanvasGroup.gameObject.SetActive(true);
+        Instance.gameVictoryCanvasGroup.blocksRaycasts = true;
+        yield return Instance.StartCoroutine(Instance.Fade(1, Instance.gameVictoryCanvasGroup, 2f));
     }
 }

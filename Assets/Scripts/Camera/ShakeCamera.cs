@@ -15,7 +15,13 @@ public class ShakeCamera : MonoBehaviour
         cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
         cinemachineBasicMultiChannelPerlin = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
     }
-    
+    private void OnEnable() {
+        EventBroker.OnBossDead += StopShake;
+    }
+    private void OnDisable() {
+        EventBroker.OnBossDead -= StopShake;
+    }
+
     private void Update() {
         if(shakeTimer > 0)
         {
@@ -32,4 +38,6 @@ public class ShakeCamera : MonoBehaviour
         cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 1f;
         shakeTimer = time;
     }
+
+    private void StopShake() => cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = 0f;
 }

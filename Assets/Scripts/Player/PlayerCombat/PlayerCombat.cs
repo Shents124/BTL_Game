@@ -5,7 +5,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
 {
     public UnityEvent OnUpdateHealthUI;
     public bool isDeath;
-
+    public bool isVictory;
     [Header("Health Variables")]
     [SerializeField] private FloatVariable currentHealth;
     [SerializeField] private FloatVariable maxHealth;
@@ -23,7 +23,14 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
     {
         player = GetComponent<Player>();
     }
-
+    private void OnEnable()
+    {
+        EventBroker.OnBossDead += Victory;
+    }
+    private void OnDisable()
+    {
+        EventBroker.OnBossDead -= Victory;
+    }
     private void Start()
     {
         if (currentHealth.value <= 0)
@@ -31,6 +38,7 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
 
         isDamaged = false;
         isDeath = false;
+        isVictory = false;
     }
 
     public void DoingDamage()
@@ -51,11 +59,12 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
 
     public void TakeDame(int amountOfDame, Vector3 damePos)
     {
-        if (currentHealth.value >= 0)
+        if (currentHealth.value >= 0 && isDeath == false && isVictory == false)
         {
             currentHealth.value -= amountOfDame;
             OnUpdateHealthUI?.Invoke();
             isDamaged = true;
+            player.loseHPAuidoPlayer.PlayRandomSound();
         }
 
         if (currentHealth.value <= 0 && isDeath == false)
@@ -63,6 +72,8 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
             currentHealth.value = 0;
             isDeath = true;
             StartCoroutine(player.DieRespawnCoroutine());
+            player.audioManager.StopAllAudio();
+            player.gameoverAuidoPlayer.PlayRandomSound();
         }
     }
 
@@ -77,4 +88,6 @@ public class PlayerCombat : MonoBehaviour, IDamageable, IKnockbackable
     public void ResetHeath() => currentHealth.value = maxHealth.value;
 
     public int GetCurrentHealth() => currentHealth.value;
+
+    private void Victory() => isVictory = true;
 }

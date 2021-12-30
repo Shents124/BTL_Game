@@ -40,6 +40,7 @@ public class MagicProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        GetComponent<RandomAudioPlayer>().PlayRandomSound();
         animator.SetTrigger("Explosion");
         isExposion = true;
         if (other.CompareTag("Player"))

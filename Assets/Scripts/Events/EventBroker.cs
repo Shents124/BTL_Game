@@ -4,19 +4,22 @@ public class EventBroker
 {
     public static event Action OnPushing;
     public static event Action OnStopPushing;
-    public static event Action OnPlayerDead;
+    public static event Action OnBossDead;
+    public static event Action<SavePoint> OnSavePlayerPos;
 
     public static void CallOnPushing()
     {
         OnPushing?.Invoke();
     }
-     public static void CallOnStopPushing()
+    public static void CallOnStopPushing()
     {
         OnStopPushing?.Invoke();
     }
 
-    public static void CallOnPlayerDead()
+    public static void CallOnBossDead()
     {
-        OnPlayerDead?.Invoke();
+        OnBossDead?.Invoke();
     }
+
+    public static void CallOnSavePlayerPos(SavePoint savePoint) => OnSavePlayerPos?.Invoke(savePoint);
 }
