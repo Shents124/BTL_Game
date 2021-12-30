@@ -1,12 +1,17 @@
-using UnityEngine;
-public class PlayerAttackState : PlayerAbilityState
+public class PlayerAttackState : PlayerState
 {
-    private Vector2 input;
     private bool isGround;
 
-    public PlayerAttackState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public PlayerAttackState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+        if(player.CheckIfGround())
+            player.SetVelocityX(0);
     }
 
     public override void DoChecks()
@@ -19,16 +24,18 @@ public class PlayerAttackState : PlayerAbilityState
     {
         base.LogicUpdate();
 
-        input = player.InputHandle.GetMove();
-
         if (isAnimationFinished)
         {
-            if (input.x != 0)
-                playerStateMachine.ChangeState(player.MoveState);
-            else if (input.x == 0)
-                playerStateMachine.ChangeState(player.IdleState);
+            if(isGround)
+                stateMachine.ChangeState(player.IdleState);
             else if (isGround == false)
-                playerStateMachine.ChangeState(player.AirState);
+                stateMachine.ChangeState(player.AirState);
         }
+    }
+
+    public override void AnimationTrigger()
+    {    
+        player.PlayerCombat.DoingDamage();
+        player.PlayAttackingSound();
     }
 }

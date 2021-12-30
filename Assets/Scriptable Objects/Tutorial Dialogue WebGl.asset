@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827ac5e9f585175458e61ad3e31b6e40, type: 3}
+  m_Name: Tutorial Dialogue WebGl
+  m_EditorClassIdentifier: 
+  phrases:
+  - key: Infor1
+    value: 'Pres "A D" to Move
+
+      Press "Space" to Jump
+
+      Press "K" to Attack
+
+      Press
+      "Left Shift" to Dash'
+  - key: Infor2
+    value: 'You can "Dash" when Jumping to jump higher.
+
+'
+  - key: Infor3
+    value: You can press "Space" when jumping to jump higher.
+  - key: Infor4
+    value: Combine all skills to move to the Door

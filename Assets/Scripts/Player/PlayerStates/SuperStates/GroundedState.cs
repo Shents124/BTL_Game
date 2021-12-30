@@ -4,9 +4,9 @@ public class GroundedState : PlayerState
 {
     protected Vector2 input;
     protected bool isPushing;
-    private bool isGrounded;  
+    private bool isGrounded;
 
-    public GroundedState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    public GroundedState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
 
     }
@@ -22,6 +22,10 @@ public class GroundedState : PlayerState
     {
         base.Enter();
         player.JumpState.ResetAmountOfJumpLeft();
+        player.InputHandle.SetJumpInputToFalse();
+
+        player.DashState.ResetAmountOfDashLeft();
+        player.InputHandle.SetDashInputToFalse();
     }
 
     public override void LogicUpdate()
@@ -30,23 +34,19 @@ public class GroundedState : PlayerState
 
         input = player.InputHandle.GetMove();
 
-        if (player.InputHandle.IsJumping() && player.JumpState.CanJump())
+        if (player.InputHandle.IsJumping())
         {
-            playerStateMachine.ChangeState(player.JumpState);
+            stateMachine.ChangeState(player.JumpState);
             player.InputHandle.SetJumpInputToFalse();
-        }
-        else if (player.InputHandle.IsAttacking() && Mathf.Abs(input.x) <= 0.1f)
-        {
-            playerStateMachine.ChangeState(player.AttackState);
-            player.InputHandle.SetAttackInputToFalse();
         }
         else if (isGrounded == false)
         {
-            playerStateMachine.ChangeState(player.AirState);
+            stateMachine.ChangeState(player.AirState);
         }
-        else if(player.IsEscaspe == true)
+        else if (player.InputHandle.IsDashing() && player.DashState.CanDash())
         {
-            playerStateMachine.ChangeState(player.Die_EscapeState);
+            stateMachine.ChangeState(player.DashState);
+            player.InputHandle.SetDashInputToFalse();
         }
     }
 }

@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
     #region Animaion variables
     private const string Idle = "idle";
     private const string Move = "move";
@@ -11,10 +13,11 @@ public class Player : MonoBehaviour
     private const string Push = "push";
     private const string Die_Escape = "die_escape";
     private const string Dash = "dash";
+    private const string Hit = "hit";
     #endregion
 
     #region State Variables
-    public PlayerStateMachine StateMachine { get; private set; }
+    public StateMachine StateMachine { get; private set; }
     public PlayerIdleState IdleState { get; private set; }
     public PlayerMoveState MoveState { get; private set; }
     public PlayerJumpState JumpState { get; private set; }
@@ -24,26 +27,46 @@ public class Player : MonoBehaviour
     public PlayerPushState PushState { get; private set; }
     public PlayerDie_EscapeState Die_EscapeState { get; private set; }
     public PlayerDashState DashState { get; private set; }
+    public PlayerHitState HitState { get; private set; }
+
+    //[HideInInspector]
+    public int amountOfJumpsLeft;
     #endregion
 
     #region Components
     public Animator Anim { get; private set; }
     public Rigidbody2D PlayerRigid { get; private set; }
     public PlayerInputHandle InputHandle { get; private set; }
+    public PlayerCombat PlayerCombat { get; private set; }
     private CapsuleCollider2D capsuleCollider2D;
     #endregion
 
     #region Others variables
+    public PlayerSavePos playerSavePos;
     public Vector2 CurrentVelocity { get; private set; }
     public int FacingDirection { get; private set; }
     public bool IsEscaspe { get; private set; }
+    public Transform startingPostion;
+
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform pushCheck;
+    [SerializeField] private Transform jumpEffectPos;
     [SerializeField] PhysicsMaterial2D bounci;
     [SerializeField] private PlayerData playerData;
     private Vector2 workspace;
+    [SerializeField] private SavePoint lastSavePoint;
     #endregion
 
+    #region Audio Variables
+    public RandomAudioPlayer footstepAudioPlayer;
+    public RandomAudioPlayer landingAudioPlayer;
+    public RandomAudioPlayer jumpingAudioPlayer;
+    public RandomAudioPlayer attackingAudioPlayer;
+    public RandomAudioPlayer dashingAudioPlayer;
+    public RandomAudioPlayer gameoverAuidoPlayer;
+    public RandomAudioPlayer loseHPAuidoPlayer;
+    public AudioManager audioManager;
+    #endregion
     private void Awake()
     {
         StateMachine = new PlayerStateMachine();
@@ -56,6 +79,13 @@ public class Player : MonoBehaviour
         PushState = new PlayerPushState(this, StateMachine, playerData, Push);
         Die_EscapeState = new PlayerDie_EscapeState(this, StateMachine, playerData, Die_Escape);
         DashState = new PlayerDashState(this, StateMachine, playerData, Dash);
+        HitState = new PlayerHitState(this, StateMachine, playerData, Hit);
+
+        amountOfJumpsLeft = playerData.amountOfJumps;
+        if(playerSavePos.Load() == Vector3.zero)
+            this.transform.position = startingPostion.position;
+        else 
+            this.transform.position = playerSavePos.Load();
     }
 
     private void Start()
@@ -64,6 +94,7 @@ public class Player : MonoBehaviour
         InputHandle = GetComponent<PlayerInputHandle>();
         PlayerRigid = GetComponent<Rigidbody2D>();
         capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        PlayerCombat = GetComponent<PlayerCombat>();
         StateMachine.Initialize(IdleState);
         FacingDirection = 1;
         IsEscaspe = false;
@@ -78,6 +109,7 @@ public class Player : MonoBehaviour
             Slide();
         else
             capsuleCollider2D.sharedMaterial = null;
+
     }
 
     private void FixedUpdate()
@@ -128,9 +160,7 @@ public class Player : MonoBehaviour
     #endregion
 
     private void Slide() => capsuleCollider2D.sharedMaterial = bounci;
-
     private void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
-
     private void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
     private void Flip()
     {
@@ -139,11 +169,66 @@ public class Player : MonoBehaviour
         _scale.x *= -1;
         transform.localScale = _scale;
     }
-
-    public void SetGravity(int gravityScale)
+    public void SetGravity(int gravityScale) => PlayerRigid.gravityScale = gravityScale;
+    public void Escape() => IsEscaspe = true;
+    public void InstantiateEffect(GameObject effect) => Instantiate(effect, jumpEffectPos.position, Quaternion.identity);
+    public void Fly(float velocity)
     {
-        PlayerRigid.gravityScale = gravityScale;
+        PlayerRigid.velocity = new Vector2(0, velocity);
+        StateMachine.ChangeState(AirState);
+        InstantiateEffect(playerData.jumpEffect);
+        amountOfJumpsLeft = playerData.amountOfJumps - 1;
     }
 
-    public void Escape() => IsEscaspe = true;
+    public IEnumerator DieRespawnCoroutine()
+    {
+        InputHandle.canGetInput = false;
+        yield return StartCoroutine(ScreenFader.FadeSceneOut(PlayerCombat.GetCurrentHealth() > 0 ? ScreenFader.FadeType.Black : ScreenFader.FadeType.GameOver));
+        if (PlayerCombat.GetCurrentHealth() <= 0)
+        {  
+            yield return new WaitForEndOfFrame();
+            SceneController.Instance.LoadSceneWithName();
+        }
+
+        Respawn();
+        yield return new WaitForEndOfFrame();
+        yield return StartCoroutine(ScreenFader.FadeSceneIn());
+        yield return new WaitForEndOfFrame();
+        if(audioManager != null)
+            audioManager.PlayMainMusic();
+        InputHandle.canGetInput = true;
+    }
+
+    public void Respawn()
+    {
+        if (PlayerCombat.GetCurrentHealth() <= 0)
+        {
+            PlayerCombat.ResetHeath();
+            PlayerCombat.OnUpdateHealthUI?.Invoke();
+            PlayerCombat.isDeath = false;
+        }
+
+
+        if (lastSavePoint != null)
+        {
+            GameObjectTeleporter.Teleport(gameObject, lastSavePoint.transform.position);
+        }
+        else
+        {
+            GameObjectTeleporter.Teleport(gameObject, startingPostion);
+        }
+
+
+    }
+
+    public void SetSavePoint(SavePoint savePoint) => lastSavePoint = savePoint;
+
+    public void PlayFootstep()
+    {
+        footstepAudioPlayer.PlayRandomSound();
+    }
+    public void PlayLandingSound() => landingAudioPlayer.PlayRandomSound();
+    public void PlayJumpingSound() => jumpingAudioPlayer.PlayRandomSound();
+    public void PlayAttackingSound() => attackingAudioPlayer.PlayRandomSound();
+    public void PlayDashingSound() => dashingAudioPlayer.PlayRandomSound();
 }

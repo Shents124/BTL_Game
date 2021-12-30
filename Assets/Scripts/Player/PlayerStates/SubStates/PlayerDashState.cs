@@ -1,29 +1,29 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerDashState : PlayerState
 {
     private Vector2 lastAfterImagePos;
-    public PlayerDashState(Player player, PlayerStateMachine playerStateMachine, PlayerData playerData, string animBoolName) : base(player, playerStateMachine, playerData, animBoolName)
+    private int amountOfDashLeft;
+    public PlayerDashState(Player player, StateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
-
-    }
-
-    public override void DoChecks()
-    {
-        base.DoChecks();
+        amountOfDashLeft = playerData.amountOfDash;
     }
 
     public override void Enter()
     {
         base.Enter();
+        player.InstantiateEffect(playerData.jumpEffect);
+        player.PlayDashingSound();
         player.SetGravity(0);
         PlaceAfterimage();
+        amountOfDashLeft--;
     }
 
     public override void Exit()
     {
         base.Exit();
-        player.SetGravity(5);
+        player.SetGravity(playerData.defaultGravityScale);
     }
 
     public override void LogicUpdate()
@@ -34,9 +34,9 @@ public class PlayerDashState : PlayerState
         if (Time.time >= playerData.dashCoolDown + startTime)
         {
             if (player.CheckIfGround())
-                playerStateMachine.ChangeState(player.IdleState);
+                stateMachine.ChangeState(player.IdleState);
             else
-                playerStateMachine.ChangeState(player.AirState);          
+                stateMachine.ChangeState(player.AirState);
         }
     }
 
@@ -44,13 +44,27 @@ public class PlayerDashState : PlayerState
     {
         base.PhysicsUpdate();
 
-         player.SetVelocityX(playerData.dashVelocity * player.FacingDirection * Time.deltaTime);
-         player.SetVelocityY(0);     
+        player.SetVelocityX(playerData.dashVelocity * player.FacingDirection * Time.deltaTime);
+        player.SetVelocityY(0);
+    }
+
+    public bool CanDash()
+    {
+        if (amountOfDashLeft > 0) return true;
+        return false;
+    }
+
+    public void ResetAmountOfDashLeft() => amountOfDashLeft = playerData.amountOfDash;
+
+    public IEnumerator GroundDashDelay()
+    {
+        yield return new WaitForSeconds(playerData.dashCoolDown);
+        ResetAmountOfDashLeft();
     }
 
     private void CheckIfShouldPlaceAfterImage()
     {
-        if(Vector2.Distance(player.transform.position, lastAfterImagePos) >= playerData.distanceBetweenImages)
+        if (Vector2.Distance(player.transform.position, lastAfterImagePos) >= playerData.distanceBetweenImages)
         {
             PlaceAfterimage();
         }
